@@ -1,3 +1,9 @@
+# Buidling for mobile
+
+```
+python build_xcframework.py --out opencv_build --without videoio --without highgui --without video --without calib3d --without features2d --without objdetect --without dnn --without ml --without flann --without photo --without stitching --without gapi --without imgcodecs --without world --without js --without java --without ts --without python --without features2d
+```
+
 # Building for Apple Platforms
 
 build_xcframework.py creates an xcframework supporting a variety of Apple platforms.
