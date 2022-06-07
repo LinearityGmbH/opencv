@@ -47,7 +47,7 @@ from cv_build_utils import execute, print_error, get_xcode_major, get_xcode_sett
 IPHONEOS_DEPLOYMENT_TARGET='9.0'  # default, can be changed via command line options or environment variable
 
 class Builder:
-    def __init__(self, opencv, contrib, dynamic, bitcodedisabled, exclude, disable, enablenonfree, targets, debug, debug_info, framework_name, run_tests, build_docs, swiftdisabled):
+    def __init__(self, opencv, contrib, dynamic, bitcodedisabled, exclude, disable, enablenonfree, targets, debug, debug_info, framework_name, run_tests, build_docs, swiftdisabled, ios_version):
         self.opencv = os.path.abspath(opencv)
         self.contrib = None
         if contrib:
@@ -69,6 +69,7 @@ class Builder:
         self.run_tests = run_tests
         self.build_docs = build_docs
         self.swiftdisabled = swiftdisabled
+        self.ios_version = ios_version
 
     def checkCMakeVersion(self):
         if get_xcode_version() >= (12, 2):
@@ -115,7 +116,7 @@ class Builder:
             if xcode_ver >= 7 and target[1] == 'Catalyst':
                 sdk_path = check_output(["xcodebuild", "-version", "-sdk", "macosx", "Path"]).decode('utf-8').rstrip()
                 c_flags = [
-                    "-target %s-apple-ios13.0-macabi" % target[0],  # e.g. x86_64-apple-ios13.2-macabi # -mmacosx-version-min=10.15
+                    "-target %s-apple-ios%s-macabi" % (target[0], self.ios_version),  # e.g. x86_64-apple-ios13.2-macabi # -mmacosx-version-min=10.15
                     "-isysroot %s" % sdk_path,
                     "-iframework %s/System/iOSSupport/System/Library/Frameworks" % sdk_path,
                     "-isystem %s/System/iOSSupport/usr/include" % sdk_path,
@@ -532,6 +533,7 @@ if __name__ == "__main__":
     parser.add_argument('--run_tests', default=False, dest='run_tests', action='store_true', help='Run tests')
     parser.add_argument('--build_docs', default=False, dest='build_docs', action='store_true', help='Build docs')
     parser.add_argument('--disable-swift', default=False, dest='swiftdisabled', action='store_true', help='Disable building of Swift extensions')
+    parser.add_argument('--ios_version', default="13.1", dest='ios_version', help='Target for Mac catalyst')
 
     args, unknown_args = parser.parse_known_args()
     if unknown_args:
@@ -584,7 +586,6 @@ if __name__ == "__main__":
             targets.append((iphoneos_archs, "iPhoneOS"))
         if iphonesimulator_archs:
             targets.append((iphonesimulator_archs, "iPhoneSimulator"))
-
-    b = iOSBuilder(args.opencv, args.contrib, args.dynamic, args.bitcodedisabled, args.without, args.disable, args.enablenonfree, targets, args.debug, args.debug_info, args.framework_name, args.run_tests, args.build_docs, args.swiftdisabled)
+    b = iOSBuilder(args.opencv, args.contrib, args.dynamic, args.bitcodedisabled, args.without, args.disable, args.enablenonfree, targets, args.debug, args.debug_info, args.framework_name, args.run_tests, args.build_docs, args.swiftdisabled, args.ios_version)
 
     b.build(args.out)
