@@ -29,7 +29,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=description, epilog=epilog)
     parser.add_argument('-o', '--out', metavar='OUTDIR', help='<Required> The directory where the xcframework will be created', required=True)
     parser.add_argument('--framework_name', default='opencv2', help='Name of OpenCV xcframework (default: opencv2, will change to OpenCV in future version)')
-    parser.add_argument('--iphoneos_archs', default=None, help='select iPhoneOS target ARCHS. Default is "armv7,arm64"')
+    parser.add_argument('--iphoneos_archs', default=None, help='select iPhoneOS target ARCHS. Default is "arm64"')
     parser.add_argument('--iphonesimulator_archs', default=None, help='select iPhoneSimulator target ARCHS. Default is "x86_64,arm64"')
     parser.add_argument('--macos_archs', default=None, help='Select MacOS ARCHS. Default is "x86_64,arm64"')
     parser.add_argument('--catalyst_archs', default=None, help='Select Catalyst ARCHS. Default is "x86_64,arm64"')
@@ -43,7 +43,7 @@ if __name__ == "__main__":
     iphoneos_archs = args.iphoneos_archs
     if not iphoneos_archs and not args.build_only_specified_archs:
         # Supply defaults
-        iphoneos_archs = "armv7,arm64"
+        iphoneos_archs = "arm64"
     print('Using iPhoneOS ARCHS={}'.format(iphoneos_archs))
 
     iphonesimulator_archs = args.iphonesimulator_archs

@@ -285,6 +285,9 @@ class Builder:
                 cmakecmd.append("-DCMAKE_CROSSCOMPILING=ON")
                 cmakecmd.append("-DOPENCV_WORKAROUND_CMAKE_20989=ON")
 
+        cmakecmd.append("-DWITH_PROTOBUF=OFF")
+        cmakecmd.append("-DBUILD_ZLIB=OFF")
+        
         cmakecmd.append(dir)
         cmakecmd.extend(cmakeargs)
         return cmakecmd
